@@ -9,7 +9,7 @@
                 </div>
                 <div class="p-item">
                     <i class="far fa-clock"></i>
-                    <p>Enter an email where to send results of the crawl</p>
+                    <p>Enter an email where to send results of the crawl every 24 hours</p>
                     <input type="text" name="inp_email" placeholder="Enter your email">
                 </div>
                 <div class="p-item">
