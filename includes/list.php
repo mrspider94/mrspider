@@ -6,5 +6,6 @@ $result = mysqli_query($conn, $sql);
 
 while ($data = mysqli_fetch_assoc($result)) {
     $url = $data['destination'];
-    echo $url . "\r\n";
+    $date = $data['date_time'];
+    echo $url . " - " . $date . "\r\n";
 } ?>
