@@ -1,9 +1,11 @@
-<?PHP include "includes/header.php"?>
-<div class="section">
-    <div class="wrapper">
-        <?PHP include "includes/list.php"?>
-</textarea>
-    </div>
-</div>
+<?php
 
-<?PHP include "includes/footer.php"?>
+$sql = "SELECT * FROM CRAWLER";
+$result = mysqli_query($conn, $sql);
+?> <textarea readonly> <?php 
+
+while ($data = mysqli_fetch_assoc($result)) {
+    $url = $data['destination'];
+    $date = $data['date_time'];
+    echo $url . " - " . $date . "\r\n";
+} ?>
