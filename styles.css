@@ -56,7 +56,7 @@ nav .menu-items {
     right: 0;
 }
 
-nav .menu-items a:first-child {
+nav .menu-items a:first-child{
     margin-right: 24px;
 }
 
@@ -79,6 +79,12 @@ nav .menu-items i {
     font-size: 16px;
     margin-right: 8px;
     line-height: 24px;
+}
+
+@media only screen and (max-width: 700px) {
+    nav .menu-items span {
+        display: none;
+    }
 }
 
 nav .menu-items span {
@@ -111,17 +117,34 @@ textarea {
     font-family: 'Montserrat', sans-serif;
     resize: vertical;
     overflow-y: visible;
+
+    font-size: 14px;
+    line-height: 24px;
 }
 
 form {
     position: relative;
 }
 
+@media only screen and (max-width: 700px) {
+    .p-item {
+        width: auto;
+    }
+}
+
+@media only screen and (min-width: 701px) {
+    .p-item {
+        width: calc(100%/3 - 15px);
+        min-width: 350px;
+    }
+}
+
 .p-item {
+    
     display: inline-block;
     position: relative;
-    width: calc(100%/3 - 15px);
-    min-width: 350px;
+    
+    
     height: 350px;
     margin: 6px;
     padding: 64px 36px;

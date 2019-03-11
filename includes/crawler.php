@@ -2,15 +2,17 @@
 if(isset($_POST['submit']))
 {   
     $urls_list = $_POST['url_list'];
-    $urls_array = explode(PHP_EOL, $urls_list);
-    $time_added = date("Y-m-d H:i:s");
     $email = $_POST['inp_email'];
     $link = $_POST['check_link'];
+
+    $urls_array = explode(PHP_EOL, $urls_list);
+    $time_added = date("Y-m-d H:i:s");
 
     if ($urls_list != '' && $email != '' && $link != '')
     {
         foreach ($urls_array as $url) {
-            $got = check($url, $link);
+            $results_page = curl($url);
+            $got = crawl($results_page, $link);
     
             $sqlCheck = "SELECT 1 from CRAWLER WHERE destination ='$url'";
             if ($check_result = mysqli_query($conn,$sqlCheck))
@@ -27,8 +29,6 @@ if(isset($_POST['submit']))
                 }     
             }
         }
-    
-        sendData($email, $conn);
     }
     else {
         if ($urls_list == '') {
@@ -47,27 +47,39 @@ if(isset($_POST['submit']))
 }
 
 
-function check($url, $link)
+function curl($url) {
+	$ch = curl_init();
+	$timeout = 5;
+	curl_setopt($ch, CURLOPT_URL, $url);
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+	curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+	$data = curl_exec($ch);
+	curl_close($ch);
+	return $data;
+}
+
+function crawl($url, $link)
 {
     $dom = new DOMDocument();
+    $dom->loadHTML($url);
+    $content = $dom->getElementsByTagName('a');
+
     $statusLink = 0;
     $statusNoFollow = 0;
 
-    $html = file_get_contents($url);
-    @$dom->loadHTML($html);
-    $alinks = $dom->getElementsByTagName('a');
 
-    foreach ($alinks as $alink){
-
-        if ($alink->getAttribute('href') == $link)
+    foreach ($content as $item)
+    {
+        if ($item->getAttribute('href') == $link)
         {
             $statusLink = 1;
-            if ($alink->getAttribute('rel') == 'nofollow')
+            if ($item->getAttribute('rel') == 'nofollow')
             {
                 $statusNoFollow = 1;
             }
             break;
         }
+
     }
 
     $status = array($statusLink, $statusNoFollow);
@@ -78,13 +90,16 @@ function check($url, $link)
 function sendData($email, $conn) {
     $to = $email;
     $subject = "Mr. Spider Data";
+
     $sql = "SELECT * FROM CRAWLER";
     $sql_result = mysqli_query($conn, $sql);
     $sql_rows = mysqli_num_rows($sql_result);
+
     $notfound = 0;
     $nofollow = 0;
     $notfoundArray = array();
     $nofollowArray = array();
+
     while ($row = mysqli_fetch_assoc($sql_result)) {
         if ($row['link_status'] == 0) {
             $notfound++;
@@ -96,15 +111,18 @@ function sendData($email, $conn) {
         }
     }
 
-    $contents_one = $sql_rows . " URLs checked, " . $notfound . " backlinks not found, " . $nofollow . " backlinks found with NOFOLLOW: \r\n";
+    $contents_one = $sql_rows . " URLs checked, " . $notfound . " backlinks not found, " . $nofollow . " backlinks found with NOFOLLOW: \n";
     $contents_two = '';
     $contents_three = '';
+
     foreach ($notfoundArray as $notfound_link) {
-        $contents_two = $contents_two . "- " . $notfound_link . "\r\n";
+        $contents_two = $contents_two . "- " . $notfound_link . "\n";
     }
+
     foreach($nofollowArray as $nofollow_link) {
-        $contents_three = $contents_three .  "- " . $nofollow_link . " - NOFOLLOW \r\n";
+        $contents_three = $contents_three .  "- " . $nofollow_link . " - NOFOLLOW \n";
     }
+
     $headers = "From: data@mrspider.com";
 
     $contents = $contents_one . $contents_two . $contents_three;
