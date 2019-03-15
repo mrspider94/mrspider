@@ -1,11 +1,22 @@
 <?php
+// list class
 
-$sql = "SELECT * FROM CRAWLER";
-$result = mysqli_query($conn, $sql);
-?> <textarea readonly> <?php 
+class listUrls extends mySql {
 
-while ($data = mysqli_fetch_assoc($result)) {
-    $url = $data['destination'];
-    $date = $data['date_time'];
-    echo $url . " - " . $date . "\r\n";
-} ?>
+    public function listAll() {
+        $sql = "SELECT * FROM CRAWLER";
+        $result = $this->connect()->query($sql);
+
+        echo "<textarea readonly>";
+
+        while ($row = $result->fetch_assoc()) {
+            $url = $row['destination'];
+            $date = $row['date_time'];
+            echo $date . " - " . $url . "\n";
+        }
+    
+        echo "</textarea>";
+    }
+}
+
+?>

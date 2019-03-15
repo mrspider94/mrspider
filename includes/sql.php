@@ -1,9 +1,22 @@
 <?php 
-// connect to database
-$conn = mysqli_connect("localhost", "USERNAME", "PASSWORD", "DATABASE");
-if (!$conn) {
-    die("Error connecting to database: " . mysqli_connect_error());
+
+// MySQL class
+
+class mySql {
+    private $hostname;
+    private $username;
+    private $password;
+    private $database;
+
+    protected function connect() {
+        $this->servername = "localhost";
+        $this->username = "u928739372_abam";
+        $this->password = "kazkoksai";
+        $this->database = "u928739372_abam";
+
+        $conn = new mysqli($this->servername, $this->username, $this->password,  $this->database);
+        return $conn;
+    }
 }
-// define global constants
-define ('ROOT_PATH', realpath(dirname(__FILE__)));
+
 ?>

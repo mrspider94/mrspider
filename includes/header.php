@@ -16,7 +16,7 @@
                 </div>
                 <div class="menu-items">
                     <a href="list.php"><i class="fas fa-th"></i><span>List of crawls</span></a>
-                    <a href="https://github.com/mrspider94/mrspider/"><i class="fab fa-github"></i><span>Github</span></a>
+                    <a href="https://github.com/mrspider94/mrspider/" rel="nofollow"><i class="fab fa-github"></i><span>Github</span></a>
                 </div>
                 
             </div> 
