@@ -2,8 +2,6 @@
 include "includes/mail.php";
 include "includes/spider.php";
 include "includes/request.php";
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
 // Send data class
 
 class sendData extends mySql {
