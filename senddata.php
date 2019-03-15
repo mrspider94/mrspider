@@ -1,6 +1,4 @@
 <?PHP
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
 include "includes/spider.php";
 include "includes/request.php";
 // Send data class
