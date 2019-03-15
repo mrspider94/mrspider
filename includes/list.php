@@ -12,7 +12,9 @@ class listUrls extends mySql {
         while ($row = $result->fetch_assoc()) {
             $url = $row['destination'];
             $date = $row['date_time'];
-            echo $date . " - " . $url . "\n";
+            $link = $row['target_link'];
+                
+            echo "Added on " . $date . " - " . $url . "\n";
         }
     
         echo "</textarea>";

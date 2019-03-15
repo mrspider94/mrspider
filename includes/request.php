@@ -1,6 +1,6 @@
 <?php
-
 require_once "sql.php";
+include "mail.php";
 
 // Request class
 
@@ -10,17 +10,20 @@ class request extends mySql {
 
     public function setRequest($urls_list, $email, $link) {
 
-        $crawler = new spider();
+        $spider = new spider(); // crawl class
+        $sendData = new mailCompose(); // send data class
         $this->urls_array = explode(PHP_EOL, $urls_list);
         $time_added = date("Y-m-d");
 
         if ($urls_list != '' && $email != '' && $link != '')
         {
-            foreach ($this->urls_array as $url)
+            foreach (array_filter($this->urls_array) as $url)
             {
-                $result = $crawler->crawl($url, $link); // calling a class function to crawl for links
+                $url = trim(preg_replace('/\s+/', ' ', $url)); // removing line breaks ir $url just in case there are any
+                $result = $spider->crawl($url, $link); // checking for link status
                 $this->saveRequest($url, $link, $email, $result, $time_added); // saving data
             }
+           $sendData->mailData($email); // send data 
         }
         else {
             $this->requestError($urls_list, $email, $link);
@@ -66,7 +69,7 @@ class request extends mySql {
     }
 
     public function updateData($url, $link, $email, $status) {
-        $sqlUpdate = "UPDATE CRAWLER SET status = '$status[0]', nofollow = '$status[1]', target_link = '$link' WHERE destination = '$url'";
+        $sqlUpdate = "UPDATE CRAWLER SET link_status = '$status[0]', nofollow = '$status[1]', target_link = '$link' WHERE destination = '$url'";
         $this->connect()->query($sqlUpdate);
     }
 

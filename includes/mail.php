@@ -1,6 +1,5 @@
 <?php
-include "sql.php";
-
+require_once "sql.php";
 // Mail composition class
 
 class mailCompose extends mySql {

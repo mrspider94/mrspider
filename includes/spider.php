@@ -27,7 +27,9 @@ class spider {
         @$dom->loadHTML($data);
         $links = $dom->getElementsByTagName('a');
 
-        return $this->findLink($links, $link);
+        $result = $this->findLink($links, $link);
+
+        return $result;
     }
 
     protected function findLink($links, $link) {
