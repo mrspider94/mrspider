@@ -9,10 +9,10 @@ class mySql {
     private $database;
 
     protected function connect() {
-        $this->servername = "";
-        $this->username = "";
-        $this->password = "";
-        $this->database = "";
+        $this->servername = "localhost";
+        $this->username = "u928739372_abam";
+        $this->password = "kazkoksai";
+        $this->database = "u928739372_abam";
 
         $conn = new mysqli($this->servername, $this->username, $this->password,  $this->database);
         return $conn;

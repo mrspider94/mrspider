@@ -4,20 +4,20 @@ require_once "sql.php";
 
 class mailCompose extends mySql {
     public function mailData($sendTo) {
-        $contents = $this->getContent();
+        $contents = $this->getContent($sendTo);
         $subject = "Mr. Spider Data";
         $headers = "From: data@mrspider.com";
 
         return mail($sendTo,$subject,$contents,$headers);
     }
 
-    protected function getContent() {
+    protected function getContent($sendTo) {
         $notfound = 0;
         $nofollow = 0;
         $notfoundArray = array();
         $nofollowArray = array();
 
-        $sql = "SELECT * FROM CRAWLER";
+        $sql = "SELECT * FROM CRAWLER WHERE email = '$sendTo'";
         $result = $this->connect()->query($sql);
         $rows = $result->num_rows;
 
